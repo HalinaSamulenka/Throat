@@ -1,15 +1,9 @@
-<x-guest-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold leading-tight
-                   text-xl text-gray-800 dark:text-gray-200">
-            {{ __('Word Types') }}
-        </h2>
-    </x-slot>
+<x-app-layout>
 
     <section class="w-full p-6 flex flex-col gap-4">
         <h3 class="text-lg text-gray-800 dark:text-gray-200
                    font-bold">
-            {{ __("Delete") }}
+            {{ __("Delete Word Type") }}
         </h3>
 
         <p class="text-lg bg-red-500 text-white py-6 px-4 mb-6 rounded-lg">Please confirm you wish to delete this
@@ -95,5 +89,5 @@
         </p>
     </section>
 
-</x-guest-layout>
+</x-app-layout>
 

@@ -16,7 +16,7 @@ class Word extends Model
      */
     protected $fillable = [
         'word',
-        //'definition',
+        'review',
         //'word_type_id',
     ];
 

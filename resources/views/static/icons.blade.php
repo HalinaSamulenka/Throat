@@ -1,13 +1,13 @@
-<x-guest-layout>
+<x-app-layout>
 
-    <x-slot name="header" class="flex-col gap-2">
+
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Icons used on site') }}
         </h2>
         <p class="text-lead mt-4"><a href="https://fontawesome.com/search?o=r&m=free"
                                      class="text-slate-900 border border-x-0 border-t-0 pb-1 border-slate-900 hover:text-blue-500 hover:border-sky-500 ">FontAwesome
                 (Free)</a> icons used are shown below.</p>
-    </x-slot>
+
 
     <div class="grid grid-cols-3 gap-2 text-lg">
 
@@ -59,4 +59,4 @@
     </div>
 
 
-</x-guest-layout>
+</x-app-layout>

@@ -1,20 +1,4 @@
-<x-guest-layout>
-    <x-slot name="header">
-        <div class="flex flex-row">
-            <h2 class="font-semibold leading-tight
-                    grow
-                   text-xl text-gray-800 dark:text-gray-200">
-                {{ __('Definitions') }}
-            </h2>
-            <p>
-                <a href="{{ route('definitions.create') }}"
-                   class="rounded-lg p-2 bg-blue-900 text-white
-                        hover:bg-blue-100 hover:text-blue-900
-                        transition ease-in-out duration-500"
-                >Add New Definition</a>
-            </p>
-        </div>
-    </x-slot>
+<x-app-layout>
 
     @if(session()->has('created'))
         <div class="w-full p-2 m-0 mb-6">
@@ -32,6 +16,22 @@
             </p>
         </div>
     @endif
+        @if(session()->has('updatedOwn'))
+            <div class="w-full p-2 m-0 mb-6">
+                <p class="w-full p-4 bg-amber-500 text-white rounded">
+                    <i class="fa fa-check-circle text-amber-200 bg-amber-800 rounded-full mr-4 p-2"></i>
+                    The definition "{{ session()->get('updated') }} must be updated only user who created the definition.
+                </p>
+            </div>
+        @endif
+        @if(session()->has('deletedOwn'))
+            <div class="w-full p-2 m-0 mb-6">
+                <p class="w-full p-4 bg-purple-500 text-white rounded">
+                    <i class="fa fa-check-circle text-purple-200 bg-purple-800 rounded-full mr-4 p-2"></i>
+                    The definition "{{ session()->get('deleted') }} must be deleted only user who created the definition.
+                </p>
+            </div>
+        @endif
     @if(session()->has('deleted'))
         <div class="w-full p-2 m-0 mb-6">
             <p class="w-full p-4 bg-purple-500 text-white rounded">
@@ -41,6 +41,49 @@
         </div>
     @endif
 
+        <div class="font-semibold leading-tight
+                   text-xl text-gray-800 dark:text-gray-200">
+            <h2 class="font-semibold leading-tight
+                   text-xl text-gray-800 dark:text-gray-200 text-center">
+                {{ __('Definitions') }}
+            </h2>
+        </div>
+
+    <div class="flex flex-row py-2 px-4 pt-4">
+    <div class="px-4 py-2 gap-4">
+        <span class=" w-1/10 w-12"></span>
+        <p>
+            <a href="{{ route('definitions.create') }}"
+               class="rounded-lg gap-4 p-3 bg-blue-900 text-white
+                        hover:bg-blue-100 hover:text-blue-900
+                        transition ease-in-out duration-500"
+            >Add New Definition</a>
+        </p>
+    </div>
+        <div class="px-4 py-2 gap-4">
+            <span class="w-1/10 w-12"></span>
+            <p>
+                <a href="{{ route('definitions.indexOwnDefinitions') }}"
+                   class="rounded-lg gap-4 p-3 bg-blue-900 text-white
+                        hover:bg-blue-100 hover:text-blue-900
+                        transition ease-in-out duration-500"
+                >My Own Definitions</a>
+            </p>
+        </div>
+    </div>
+    <div >
+    <form action="{{route('definitions.index')}}" method="get" class="w-full p-2 m-0 mb-6" >
+
+        <div class="w-full p-2 mt-6 mb-2">
+
+            <input type="text" id="output" class="w-3/4 p-2 m-0 mb-4 " value="{{$searchFor??''}}" name="search" placeholder="Search definition...">
+            <button type="submit" class="btn flex-fill w-20 flex-fill px-4 py-2 bg-gray-800 text-white hover:bg-gray-500">Search</button>
+            <button onclick="eraseText();" type="submit" name="clear" class="btn w-20 flex-fill px-2 py-2 bg-gray-800 text-white hover:bg-gray-500">
+                Clear</button>
+        </div>
+
+    </form>
+    </div>
     <table class="table-auto rounded-lg w-full bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 shadow">
         <thead class="rounded-t-lg border-gray-300 border-b text-left">
         <tr class="">
@@ -105,5 +148,10 @@
         </tr>
         </tfoot>
     </table>
+        <script>
+            function eraseText() {
+                document.getElementById("output").value = "";
+            }
+        </script>
 
-</x-guest-layout>
+</x-app-layout>

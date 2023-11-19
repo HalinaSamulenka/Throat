@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateWordRequest;
 use App\Models\Definition;
 use App\Models\Word;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class WordController extends Controller
 {
@@ -17,11 +18,46 @@ class WordController extends Controller
      */
     public function index()
     {
-
         $definitions=Definition::first();
-        $words = Word::paginate(5);
 
-        return view('word.index', compact(['words','definitions']));
+        $request = Request()->all();
+        $clear = $request['clear'] ?? '';
+        $searchFor = $request['search'] ?? '';
+        if ($clear) {
+            $searchFor = "";
+        }
+
+        if ($searchFor === "") {
+            $words = Word::paginate(5);
+        } else {
+            $words = Word::
+                where('word', 'like', "%{$searchFor}%")
+                ->paginate(5);
+        }
+
+        return view('word.index', compact(['words','definitions', 'searchFor']));
+    }
+
+    public function indexOwnWords()
+    {
+        $definitions=Definition::first();
+
+        $request = Request()->all();
+        $clear = $request['clear'] ?? '';
+        $searchFor = $request['search'] ?? '';
+        if ($clear) {
+            $searchFor = "";
+        }
+
+        if ($searchFor === "") {
+            $words = Word::where('user_id', Auth::user()->id)->paginate(5);
+        } else {
+            $words = Word::where('user_id', Auth::user()->id)
+            ->where('word', 'like', "%{$searchFor}%")
+                ->paginate(5);
+        }
+
+        return view('word.indexOwnWords', compact(['words','definitions', 'searchFor']));
     }
 
     /**
@@ -38,7 +74,8 @@ class WordController extends Controller
     public function store(StoreWordRequest $request)
     {
         $word = new Word();
-        $word->word = $request['word'];
+        $word->word = $request->input('word');
+        $word->review = $request->review == true ? '1':'0';
         $request->user()->words()->save($word);
         return redirect(route('words.index'))
             ->with('created', $word->word)
@@ -58,7 +95,9 @@ class WordController extends Controller
      */
     public function edit(Word $word)
     {
-        //
+        //$definitions = Definition::all();
+
+        return view('word.edit', compact(['word']));
     }
 
     /**
@@ -66,7 +105,21 @@ class WordController extends Controller
      */
     public function update(UpdateWordRequest $request, Word $word)
     {
-        //
+        $validated = $request->validated();
+        if(Auth::user()->id == $word->user_id){
+            $word->word = $request->input('word');
+            $word->review = $request->review == true ? '1':'0';
+            $word->update();
+
+        return redirect(route('words.index'))
+            ->with('updated', "{$word->word}")
+            ->with('messageType', 'updated');}
+        else{
+            return redirect(route('words.index'))
+                ->with('updatedOwn', $word->word)
+                ->with('messages', 'updatedOwn');
+        }
+
     }
 
     public function delete(Word $word)
@@ -79,9 +132,18 @@ class WordController extends Controller
      */
     public function destroy(Word $word)
     {
-        $oldWord = $word;
-        $word->delete();
 
-        return redirect(route('words.index'))->with('deleted', "{$oldWord->word}");
+        if(Auth::user()->id == $word->user_id){
+            $oldWord = $word;
+            $word->delete();
+            $word->definitions()->delete();
+
+        return redirect(route('words.index'))->with('deleted', "{$oldWord->word}");}
+        else{
+            $oldWord = $word;
+            return redirect(route('words.index'))
+                ->with('deletedOwn', $oldWord->word)
+                ->with('messages', 'deletedOwn');
+        }
     }
 }

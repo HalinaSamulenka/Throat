@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Definition extends Model
 {
@@ -20,7 +21,9 @@ class Definition extends Model
         'definition',
         'user_id',
         'appropriate',
-        'rating_id'
+        'rating_id',
+        'review'
+
     ];
 
     /**
@@ -47,13 +50,13 @@ class Definition extends Model
 
     public function word()
     {
-        return $this->belongsTo(Word::class)->withDefault(['word'=>'No word']);
+        return $this->belongsTo(Word::class);
     }
 
 
     public function wordType()
     {
-        return $this->belongsTo(WordType::class);
+        return $this->belongsTo(WordType::class)->withDefault(['name'=>'unknown']);
     }
 
     public function rating()

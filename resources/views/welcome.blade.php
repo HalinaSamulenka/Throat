@@ -1,72 +1,32 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Welcome to our app') }}
-        </h2>
-    </x-slot>
-
-</x-app-layout>
-
-
-
-
-<!--<x-guest-layout>
-    <x-slot name="header">
-        <div class="flex flex-row">
-            <h2 class="font-semibold leading-tight
-                    grow
-                   text-xl text-gray-800 dark:text-gray-200">
-                <img src="{{ URL::to('/') }}/images/icons/uvula.png" alt="" class="h-8 inline-flex">
-                {{ __('THROAT') }}
-            </h2>
-
-            @if (Route::has('login'))
-                <div class="sm:top-0 sm:right-0 p-2 text-right z-10">
-                    @auth
-                        <a href="{{ url('/dashboard') }}"
-                           class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}"
-                           class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log
-                            in</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}"
-                               class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-        </div>
-    </x-slot>
-
-    @if(session()->has('created'))
-        <div class="w-full p-2 m-0 mb-6">
-            <p class="w-full p-4 bg-green-500 text-white rounded">
-                <i class="text-xl fa fa-check-circle text-green-200 bg-green-800 rounded-full mr-4 p-2"></i>
-                The rating "{{ session()->get('created') }} was created successfully.
-            </p>
-        </div>
-    @endif
-    @if(session()->has('updated'))
-        <div class="w-full p-2 m-0 mb-6">
-            <p class="w-full p-4 bg-amber-500 text-white rounded">
-                <i class="fa fa-check-circle text-amber-200 bg-amber-800 rounded-full mr-4 p-2"></i>
-                The rating "{{ session()->get('updated') }} was updated successfully.
-            </p>
-        </div>
-    @endif
-    @if(session()->has('deleted'))
-        <div class="w-full p-2 m-0 mb-6">
-            <p class="w-full p-4 bg-purple-500 text-white rounded">
-                <i class="fa fa-check-circle text-purple-200 bg-purple-800 rounded-full mr-4 p-2"></i>
-                The rating "{{ session()->get('deleted') }} was deleted successfully.
-            </p>
-        </div>
-    @endif
-
 
     <div class="max-w-7xl mx-auto p-6 lg:p-8">
+
+
+        @if(session()->has('created'))
+            <div class="w-full p-2 m-0 mb-6">
+                <p class="w-full p-4 bg-green-500 text-white rounded">
+                    <i class="text-xl fa fa-check-circle text-green-200 bg-green-800 rounded-full mr-4 p-2"></i>
+                    The rating "{{ session()->get('created') }} was created successfully.
+                </p>
+            </div>
+        @endif
+        @if(session()->has('updated'))
+            <div class="w-full p-2 m-0 mb-6">
+                <p class="w-full p-4 bg-amber-500 text-white rounded">
+                    <i class="fa fa-check-circle text-amber-200 bg-amber-800 rounded-full mr-4 p-2"></i>
+                    The rating "{{ session()->get('updated') }} was updated successfully.
+                </p>
+            </div>
+        @endif
+        @if(session()->has('deleted'))
+            <div class="w-full p-2 m-0 mb-6">
+                <p class="w-full p-4 bg-purple-500 text-white rounded">
+                    <i class="fa fa-check-circle text-purple-200 bg-purple-800 rounded-full mr-4 p-2"></i>
+                    The rating "{{ session()->get('deleted') }} was deleted successfully.
+                </p>
+            </div>
+        @endif
 
         <div class="mt-16">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 ">
@@ -190,32 +150,4 @@
             </div>
         </div>
 
-        <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
-            <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-left">
-                <div class="flex items-center gap-4">
-                    <a href="https://github.com/sponsors/taylorotwell"
-                       class="group inline-flex items-center hover:text-gray-700 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             class="-mt-px mr-1 w-5 h-5 stroke-gray-400 dark:stroke-gray-600 group-hover:stroke-gray-600 dark:group-hover:stroke-gray-400">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>
-                        </svg>
-                        Sponsor
-                    </a>
-                </div>
-            </div>
-            @if(env('APP_ENV')=='local')
-                <div class="ml-4 text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
-                    Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
-                </div>
-            @endif
-
-            <div class="ml-4 text-right text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
-                <a href="https://www.flaticon.com/free-icons/uvula" title="uvula icons">Uvula icons created by Freepik -
-                    Flaticon</a>
-            </div>
-            </p>
-        </div>
-    </div>
-
-</x-guest-layout>-->
+</x-app-layout>

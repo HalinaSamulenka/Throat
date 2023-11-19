@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold leading-tight
                    text-xl text-gray-800 dark:text-gray-200">
@@ -107,4 +107,4 @@
         </p>
     </section>
 
-</x-guest-layout>
+</x-app-layout>

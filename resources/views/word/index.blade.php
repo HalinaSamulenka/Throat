@@ -1,20 +1,5 @@
-<x-guest-layout>
-    <x-slot name="header">
-        <div class="flex flex-row">
-            <h2 class="font-semibold leading-tight
-                    grow
-                   text-xl text-gray-800 dark:text-gray-200">
-                {{ __('Words') }}
-            </h2>
-            <p>
-                <a href="{{ route('words.create') }}"
-                   class="rounded-lg p-2 bg-blue-900 text-white
-                        hover:bg-blue-100 hover:text-blue-900
-                        transition ease-in-out duration-500"
-                >Add New Word</a>
-            </p>
-        </div>
-    </x-slot>
+<x-app-layout>
+
 
     @if(session()->has('created'))
         <div class="w-full p-2 m-0 mb-6">
@@ -31,7 +16,15 @@
                 The word "{{ session()->get('updated') }} was updated successfully.
             </p>
         </div>
-    @endif
+        @endif
+        @if(session()->has('updatedOwn'))
+            <div class="w-full p-2 m-0 mb-6">
+                <p class="w-full p-4 bg-amber-500 text-white rounded">
+                    <i class="fa fa-check-circle text-amber-200 bg-amber-800 rounded-full mr-4 p-2"></i>
+                    The word "{{ session()->get('updated') }} must be updated only user who created the word.
+                </p>
+            </div>
+        @endif
     @if(session()->has('deleted'))
         <div class="w-full p-2 m-0 mb-6">
             <p class="w-full p-4 bg-purple-500 text-white rounded">
@@ -40,6 +33,56 @@
             </p>
         </div>
     @endif
+        @if(session()->has('deletedOwn'))
+            <div class="w-full p-2 m-0 mb-6">
+                <p class="w-full p-4 bg-purple-500 text-white rounded">
+                    <i class="fa fa-check-circle text-purple-200 bg-purple-800 rounded-full mr-4 p-2"></i>
+                    The word "{{ session()->get('deleted') }} must be deleted only user who created the word.
+                </p>
+            </div>
+        @endif
+<div class="font-semibold leading-tight
+                   text-xl text-gray-800 dark:text-gray-200">
+        <h2 class="font-semibold leading-tight
+                   text-xl text-gray-800 dark:text-gray-200 text-center">
+            {{ __('Words') }}
+        </h2>
+</div>
+    <div class="flex flex-row py-2 px-4 pt-4">
+        <div class="px-4 py-2 gap-4">
+            <span class=" w-1/10 w-12"></span>
+            <p>
+                <a href="{{ route('words.create') }}"
+                   class="rounded-lg gap-4 p-3 bg-blue-900 text-white
+                        hover:bg-blue-100 hover:text-blue-900
+                        transition ease-in-out duration-500"
+                >Add New Word</a>
+            </p>
+        </div>
+        <div class="px-4 py-2 gap-4">
+            <span class="w-1/10 w-12"></span>
+            <p>
+                <a href="{{ route('words.indexOwnWords') }}"
+                   class="rounded-lg gap-4 p-3 bg-blue-900 text-white
+                        hover:bg-blue-100 hover:text-blue-900
+                        transition ease-in-out duration-500"
+                >My Own words</a>
+            </p>
+        </div>
+    </div>
+    <div >
+        <form action="{{route('words.index')}}" method="get" class="w-full p-2 m-0 mb-6" >
+
+            <div class="w-full p-2 mt-6 mb-2">
+
+                <input type="text" id="output" class="w-3/4 p-2 m-0 mb-4 " value="{{$searchFor??''}}" name="search" placeholder="Search word...">
+                <button type="submit" class="btn flex-fill w-20 flex-fill px-4 py-2 bg-gray-800 text-white hover:bg-gray-500">Search</button>
+                <button onclick="eraseText();" type="submit" name="clear" class="btn w-20 flex-fill px-2 py-2 bg-gray-800 text-white hover:bg-gray-500">
+                    Clear</button>
+            </div>
+
+        </form>
+    </div>
 
     <table class="table-auto rounded-lg w-full bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 shadow">
         <thead class="rounded-t-lg border-gray-300 border-b text-left">
@@ -77,7 +120,7 @@
                         <span class="sr-only">Edit</span>
                     </a>
 
-                    <a href="{{ route('words.delete',['word'=>$word->id]) }}"
+                    <a href="{{ route('words.delete',['word'=>$word->id])}}"
                        class="text-center p-2 grow rounded-md
                           text-white
                           bg-red-500 hover:bg-red-800
@@ -98,5 +141,9 @@
         </tr>
         </tfoot>
     </table>
-
-</x-guest-layout>
+    <script>
+        function eraseText() {
+            document.getElementById("output").value = "";
+        }
+    </script>
+</x-app-layout>

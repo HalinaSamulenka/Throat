@@ -1,20 +1,5 @@
-<x-guest-layout>
-    <x-slot name="header">
-        <div class="flex flex-row">
-            <h2 class="font-semibold leading-tight
-                    grow
-                   text-xl text-gray-800 dark:text-gray-200">
-                {{ __('Ratings') }}
-            </h2>
-            <p>
-                <a href="{{ route('ratings.create') }}"
-                   class="rounded-lg p-2 bg-blue-900 text-white
-                        hover:bg-blue-100 hover:text-blue-900
-                        transition ease-in-out duration-500"
-                >Add New Rating</a>
-            </p>
-        </div>
-    </x-slot>
+<x-app-layout>
+
 
     @if(session()->has('created'))
         <div class="w-full p-2 m-0 mb-6">
@@ -40,6 +25,20 @@
             </p>
         </div>
     @endif
+<div class="flex flex-row px-4 py-8">
+            <h2 class="font-semibold leading-tight
+                    grow
+                   text-xl text-gray-800 dark:text-gray-200">
+                {{ __('Ratings') }}
+            </h2>
+            <p>
+                <a href="{{ route('ratings.create') }}"
+                   class="rounded-lg p-2 bg-blue-900 text-white
+                        hover:bg-blue-100 hover:text-blue-900
+                        transition ease-in-out duration-500"
+                >Add New Rating</a>
+            </p>
+</div>
 
     <table class="table-auto rounded-lg w-full bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 shadow">
         <thead class="rounded-t-lg border-gray-300 border-b text-left">
@@ -105,4 +104,4 @@
         </tfoot>
     </table>
 
-</x-guest-layout>
+</x-app-layout>

@@ -33,4 +33,5 @@ class Rating extends Model
         return $this->belongsToMany(Definition::class,'definition_ratings');
     }
 
+
 }

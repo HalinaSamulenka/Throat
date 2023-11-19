@@ -1,10 +1,10 @@
-<x-guest-layout>
+<x-app-layout>
 
-    <x-slot name="header">
+
         <h2 class="font-semibold text-2xl leading-tight">
             {{ __('Available Colours') }}
         </h2>
-    </x-slot>
+
 
     <h3 class="text-2xl text-black dark:text-white">Standard TailwindCSS Colours</h3>
 
@@ -2012,4 +2012,4 @@
         </div>
     </div>
 
-</x-guest-layout>
+</x-app-layout>

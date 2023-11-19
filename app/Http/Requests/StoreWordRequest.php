@@ -23,6 +23,8 @@ class StoreWordRequest extends FormRequest
     {
         return [
             'word' => ['required', 'max:255'],
+            'appropriate'=> ['nullable'],
+            'review'=> ['nullable'],
         ];
     }
 }

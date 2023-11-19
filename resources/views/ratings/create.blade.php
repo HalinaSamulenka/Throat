@@ -1,16 +1,4 @@
-<x-guest-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold leading-tight
-                   text-xl text-gray-800 dark:text-gray-200">
-            {{ __('Ratings') }}
-        </h2>
-    </x-slot>
-
-    <section class="w-full p-6 flex flex-col gap-4">
-        <h3 class="text-lg text-gray-800 dark:text-gray-200
-                   font-bold">
-            {{ __('Add') }}
-        </h3>
+<x-app-layout>
 
         @if($errors->any())
             <div class="flex flex-col gap-4 bg-red-200 text-red-800 my-4 rounded-lg">
@@ -19,7 +7,11 @@
                 @endforeach
             </div>
         @endif
-
+    <section class="w-full p-6 flex flex-col gap-4">
+        <h3 class="text-lg text-gray-800 dark:text-gray-200
+                   font-bold">
+            {{ __('Add Rating') }}
+        </h3>
         <form
             method="POST"
             action="{{ route('ratings.store') }}"
@@ -121,4 +113,4 @@
 
     </section>
 
-</x-guest-layout>
+</x-app-layout>

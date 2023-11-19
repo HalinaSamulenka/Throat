@@ -1,15 +1,9 @@
-<x-guest-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold leading-tight
-                   text-xl text-gray-800 dark:text-gray-200">
-            {{ __('Word Types') }}
-        </h2>
-    </x-slot>
+<x-app-layout>
 
     <section class="w-full p-6 flex flex-col gap-4">
         <h3 class="text-lg text-gray-800 dark:text-gray-200
                    font-bold">
-            Details
+            Word Type Details
         </h3>
 
         <div class="flex flex-row gap-4 rounded-md
@@ -88,5 +82,5 @@
         </p>
     </section>
 
-</x-guest-layout>
+</x-app-layout>
 

@@ -1,15 +1,9 @@
-<x-guest-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold leading-tight
-                   text-xl text-gray-800 dark:text-gray-200">
-            {{ __('Words') }}
-        </h2>
-    </x-slot>
+<x-app-layout>
 
     <section class="w-full p-6 flex flex-col gap-4">
         <h3 class="text-lg text-gray-800 dark:text-gray-200
                    font-bold">
-            Details
+            Word Details
         </h3>
 
         <div class="flex flex-row gap-4 rounded-md
@@ -21,6 +15,7 @@
             </p>
             <p class="p-2 w-5/6">{{ $word->word }}</p>
         </div>
+
         @foreach($word->definitions as $word)
         <div class="flex flex-row gap-4 rounded-md
                     bg-gray-200 dark:bg-gray-900">
@@ -39,6 +34,34 @@
                 </ul>
         </div>
         @endforeach
+
+        <div class="flex flex-row gap-4 rounded-md
+                    bg-gray-200 dark:bg-gray-900">
+            <p class="p-2 w-1/6 rounded-l-md
+                      bg-gray-500 dark:bg-gray-800
+                      text-gray-100">
+                Review
+            </p>
+        @if ($word->review==true)
+                <p class="p-2 w-5/6">Review</p>
+        @else
+            <p class="p-2 w-5/6">No</p>
+            @endforelse
+        </div>
+
+        <div class="flex flex-row gap-4 rounded-md
+                    bg-gray-200 dark:bg-gray-900">
+            <p class="p-2 w-1/6 rounded-l-md
+                      bg-gray-500 dark:bg-gray-800
+                      text-gray-100">
+                Status
+            </p>
+            @if ($word->appropriate==true)
+                <p class="p-2 w-5/6">Not Appropriate</p>
+            @else
+                <p class="p-2 w-5/6">Appropriate</p>
+                @endforelse
+        </div>
 
         <div class="flex flex-row gap-4 rounded-md
                     bg-gray-200 dark:bg-gray-900">
@@ -95,4 +118,4 @@
         </p>
     </section>
 
-</x-guest-layout>
+</x-app-layout>

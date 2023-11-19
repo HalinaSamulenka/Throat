@@ -16,7 +16,7 @@
 </head>
 
 <body class="font-sans antialiased">
-@include('layouts.navigation_guest')
+<!--@include('layouts.navigation')-->
 <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
 
     <!-- Page Heading -->
@@ -35,5 +35,6 @@
         {{ $slot }}
     </main>
 </div>
+
 </body>
 </html>

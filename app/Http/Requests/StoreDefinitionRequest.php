@@ -25,9 +25,9 @@ class StoreDefinitionRequest extends FormRequest
             'word_id' => ['required'],
             'word_type_id'=> ['required'],
             'definition'=> ['required'],
-            //'user_id'=> ['required'],
-            //'appropriate'=> ['required'],
+            'appropriate'=> ['nullable'],
             'rating_id'=> ['required'],
+            'review'=> ['nullable'],
         ];
     }
 }

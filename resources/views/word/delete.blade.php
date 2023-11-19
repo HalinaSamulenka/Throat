@@ -1,15 +1,10 @@
-<x-guest-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold leading-tight
-                   text-xl text-gray-800 dark:text-gray-200">
-            {{ __('Words') }}
-        </h2>
-    </x-slot>
+<x-app-layout>
+
 
     <section class="w-full p-6 flex flex-col gap-4">
         <h3 class="text-lg text-gray-800 dark:text-gray-200
                    font-bold">
-            {{ __("Delete") }}
+            {{ __("Delete Word") }}
         </h3>
 
         <p class="text-lg bg-red-500 text-white py-6 px-4 mb-6 rounded-lg">Please confirm you wish to delete this
@@ -69,7 +64,7 @@
 
         <form
             method="POST"
-            action="{{ route('words.destroy', ['word'=>$word]) }}"
+            action="{{ route('words.destroy', ['word'=>$word->id]) }}"
             class="flex flex-col w-full gap-4">
 
             @csrf
@@ -105,4 +100,4 @@
         </p>
     </section>
 
-</x-guest-layout>
+</x-app-layout>

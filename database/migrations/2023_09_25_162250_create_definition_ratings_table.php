@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('definition_ratings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->default(0);
-            $table->foreignId('definition_id')->default(0);
+            //$table->foreignId('user_id')->default(0);
+            //$table->foreignId('definition_id')->default(0);
             $table->foreignId('rating_id')->default(0);
             $table->tinyInteger('value');
+            $table->foreignId('user_id')->references('id')->on('users')
+                ->onDelete('cascade');
+            $table->foreignId('definition_id')->references('id')->on('definitions')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,4 +32,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('definition_ratings');
     }
+
 };

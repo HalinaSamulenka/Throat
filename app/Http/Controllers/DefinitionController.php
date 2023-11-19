@@ -17,9 +17,55 @@ class DefinitionController extends Controller
      */
     public function index()
     {
+        $request = Request()->all();
+        $clear = $request['clear'] ?? '';
+        $searchFor = $request['search'] ?? '';
+        if ($clear) {
+            $searchFor = "";
+        }
 
-        $definitions=Definition::with('word')->paginate(5);
-        return view('definitions.index', compact(['definitions']));
+        if ($searchFor === "" && Auth::user()->id == 1) {
+            $definitions=Definition::with('word')->paginate(5);
+        }
+        elseif($searchFor === "") {
+            $definitions=Definition::with('word')->where('appropriate',0)->paginate(5);
+        }
+        elseif (Auth::user()->id == 1){
+            $definitions = Definition::with('word')
+            ->where('definition', 'like', "%{$searchFor}%")
+            ->paginate(5);
+        }
+        else{
+            $definitions = Definition::with('word')
+                ->where('appropriate', 0)
+                ->where('definition', 'like', "%{$searchFor}%")
+                ->paginate(5);
+        }
+
+        return view('definitions.index', compact(['definitions', 'searchFor']));
+    }
+
+    public function indexOwnDefinitions()
+    {
+        $request = Request()->all();
+        $clear = $request['clear'] ?? '';
+        $searchFor = $request['search'] ?? '';
+        if ($clear) {
+            $searchFor = "";
+        }
+
+        if ($searchFor === "") {
+            $definitions=Definition::with('word')
+            ->where('user_id', Auth::user()->id)->paginate(5);
+        } else {
+            $definitions = Definition::with('word')
+                ->where('user_id', Auth::user()->id)
+                ->where('definition', 'like', "%{$searchFor}%")
+                ->paginate(5);
+
+        }
+
+        return view('definitions.indexOwnDefinitions', compact(['definitions', 'searchFor']));
     }
 
     /**
@@ -40,40 +86,14 @@ class DefinitionController extends Controller
     {
         $definition = new Definition();
 
-        //$definition->definition = $request['definition'];
-        //$definition->word()->word_id = $request->get('word_id');
-        //$request->user()->definitions()->save($definition);
-
-        //$validatedData = $request->validated();
-        //$word = Word::findorFail($validatedData['word_id']);
-        //$wordType = WordType::findorFail($validatedData['word_type_id']);
-
-        //$definition = $word->definitions()->create([
-         //   'word_id'=>$validatedData['word_id'],
-         //   'definition'=>$validatedData['definition']
-        //]);
-
-        //$definition = $wordType->definitions()->create([
-         //   'word_type_id'=>$validatedData['word_type_id'],
-
-        //]);
-
         $definition->word_id = $request->input('word_id');
         $definition->word_type_id = $request->input('word_type_id');
         $definition->definition = $request->input('definition');
         $definition->user_id = Auth::user()->id;
-        //$definition->ratings_ids = $request->input('ratings_ids');
-        //$request->user()->definitions()->save($definition);
-        //$definition->save();
-
+        $definition->review = $request->review == true ? '1':'0';
 
         $rating = Rating::find($request->rating_id);
-        $rating->definition()->save($definition);
-        //$rating = Rating::all();
-        //$definition->rating()->attach(
-        //    $rating
-        //);
-        //$request->user()->definitions()->save($definition);
+        $rating->definition()->save($definition,['user_id'=>Auth::user()->id]);
 
 
         return redirect(route('definitions.index'))
@@ -86,7 +106,12 @@ class DefinitionController extends Controller
      */
     public function show(Definition $definition)
     {
-        //
+        $words = Word::all();
+        $wordTypes = WordType::all();
+        $user = $definition->user()->first();
+        $rating = $definition->rating()->first();
+        return view('definitions.show',compact('words','rating','wordTypes','definition','user'));
+
     }
 
     /**
@@ -94,7 +119,12 @@ class DefinitionController extends Controller
      */
     public function edit(Definition $definition)
     {
-        //
+
+        $words = Word::all();
+        $wordTypes = WordType::all();
+        $ratings = Rating::with('definition')->get();
+
+        return view('definitions.edit', compact(['words','wordTypes','ratings','definition']));
     }
 
     /**
@@ -102,7 +132,33 @@ class DefinitionController extends Controller
      */
     public function update(UpdateDefinitionRequest $request, Definition $definition)
     {
-        //
+        $definition->word_id = $request->input('word_id');
+        $definition->word_type_id = $request->input('word_type_id');
+        $definition->definition = $request->input('definition');
+        $definition->appropriate = $request->appropriate == true ? '1':'0';
+        $definition->review = $request->review == true ? '1':'0';
+       if(Auth::user()->id == $definition->user_id){
+        $definition->update();
+        $definition->rating()->syncWithPivotValues([$request->rating_id],['user_id'=>Auth::user()->id]);
+
+        return redirect(route('definitions.index'))
+            ->with('updated', $definition->definition)
+            ->with('messages', 'updated');}
+       else{
+           return redirect(route('definitions.index'))
+               ->with('updatedOwn', $definition->definition)
+               ->with('messages', 'updatedOwn');
+       }
+
+    }
+
+    public function delete(Definition $definition)
+    {
+        $words = Word::all();
+        $wordTypes = WordType::all();
+        $user = $definition->user()->first();
+        $rating = $definition->rating()->first();
+        return view('definitions.delete', compact(['definition','words','wordTypes','rating','user']));
     }
 
     /**
@@ -110,6 +166,17 @@ class DefinitionController extends Controller
      */
     public function destroy(Definition $definition)
     {
-        //
+        if(Auth::user()->id == $definition->user_id){
+            $oldDefinition = $definition;
+            $definition->delete();
+            $definition->rating()->detach();
+
+            return redirect(route('definitions.index'))->with('deleted', "{$oldDefinition->definition}");}
+        else{
+            $oldDefinition = $definition;
+            return redirect(route('definitions.index'))
+                ->with('deletedOwn', $oldDefinition->definition)
+                ->with('messages', 'deletedOwn');
+        }
     }
 }

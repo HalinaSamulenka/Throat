@@ -11,7 +11,7 @@ class UpdateWordRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateWordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'word' => ['required', 'max:255'],
+            'appropriate'=> ['nullable'],
+            'review'=> ['nullable'],
         ];
     }
 }

@@ -11,7 +11,7 @@ class UpdateDefinitionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class UpdateDefinitionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'word_id' => ['required'],
+            'word_type_id'=> ['required'],
+            'definition'=> ['required'],
+            'appropriate'=> ['nullable'],
+            'rating_id'=> ['required'],
+            'review'=> ['nullable'],
         ];
     }
 }

@@ -1,15 +1,9 @@
-<x-guest-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold leading-tight
-                   text-xl text-gray-800 dark:text-gray-200">
-            {{ __('Ratings') }}
-        </h2>
-    </x-slot>
+<x-app-layout>
 
     <section class="w-full p-6 flex flex-col gap-4">
         <h3 class="text-lg text-gray-800 dark:text-gray-200
                    font-bold">
-            {{ __('Edit') }}
+            {{ __('Edit Rating') }}
         </h3>
 
         @if($errors->any())
@@ -118,4 +112,4 @@
 
     </section>
 
-</x-guest-layout>
+</x-app-layout>

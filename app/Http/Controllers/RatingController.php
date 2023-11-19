@@ -25,6 +25,7 @@ class RatingController extends Controller
      */
     public function create()
     {
+
         return view('ratings.create');
     }
 
