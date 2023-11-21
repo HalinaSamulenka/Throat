@@ -28,7 +28,7 @@
             <ul class="p-2 text-left">
 
                 <li>
-                {{ \Illuminate\Support\Str::words($word->definition,15) }}
+                    {{ \Illuminate\Support\Str::words($word->definition,15) }}
 
             </li>
                 </ul>

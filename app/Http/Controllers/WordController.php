@@ -28,11 +28,11 @@ class WordController extends Controller
         }
 
         if ($searchFor === "") {
-            $words = Word::paginate(5);
+            $words = Word::paginate(10);
         } else {
             $words = Word::
                 where('word', 'like', "%{$searchFor}%")
-                ->paginate(5);
+                ->paginate(10);
         }
 
         return view('word.index', compact(['words','definitions', 'searchFor']));
@@ -50,11 +50,11 @@ class WordController extends Controller
         }
 
         if ($searchFor === "") {
-            $words = Word::where('user_id', Auth::user()->id)->paginate(5);
+            $words = Word::where('user_id', Auth::user()->id)->paginate(10);
         } else {
             $words = Word::where('user_id', Auth::user()->id)
             ->where('word', 'like', "%{$searchFor}%")
-                ->paginate(5);
+                ->paginate(10);
         }
 
         return view('word.indexOwnWords', compact(['words','definitions', 'searchFor']));

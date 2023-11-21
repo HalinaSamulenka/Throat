@@ -55,9 +55,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('/wordtypes', WordTypeController::class)->except(['index', 'show']);
     Route::get('/wordtypes/{wordtype}/delete', [WordTypeController::class, 'delete'])->name('wordtypes.delete');
 
-    Route::resource('/words', WordController::class)->except(['index', 'show']);
-    Route::get('/words/{word}/delete', [WordController::class, 'delete'])->name('words.delete');
-    Route::get('words/indexOwnWords', [WordController::class, 'indexOwnWords'])->name('words.indexOwnWords');
+    Route::resource('/words', \App\Http\Controllers\WordController::class)->except(['index', 'show']);
+    Route::get('/words/{word}/delete', [\App\Http\Controllers\WordController::class, 'delete'])->name('words.delete');
+    Route::get('words/indexOwnWords', [\App\Http\Controllers\WordController::class, 'indexOwnWords'])->name('words.indexOwnWords');
 
 
     Route::resource('/definitions', \App\Http\Controllers\DefinitionController::class)->except(['index', 'show']);
@@ -68,9 +68,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{user}/delete', [UserController::class, 'delete'])->name('users.delete');
 });
 
-
+Route::resource('words', \App\Http\Controllers\WordController::class)->only(['index', 'show']);
 Route::resource('wordtypes', WordTypeController::class)->only(['index', 'show']);
-Route::resource('words', WordController::class)->only(['index', 'show']);
+
 Route::resource('definitions', DefinitionController::class)->only(['index', 'show']);
 Route::resource('users', UserController::class)->only(['index', 'show']);
 Route::resource('ratings', RatingController::class)->only(['index', 'show']);
