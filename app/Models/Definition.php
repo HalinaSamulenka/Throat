@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Definition extends Model
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -63,4 +64,10 @@ class Definition extends Model
     {
         return $this->belongsToMany(Rating::class,'definition_ratings');
     }
+    public function avgRating()
+    {
+        return $this->rating->avg('ratings');
+    }
+
+
 }

@@ -9,16 +9,14 @@ use App\Models\WordType;
 class WordTypeController extends Controller
 {
 
-    /**
-     * Display a listing of the resource.
-     *
-     * todo: add a route to the word types index method
-     * todo: make the index method display the wordtypes.index view
-     * todo: create the wordtypes/index.blade.php file and
-     *       display the word types in a table
-     * todo: add pagination to the table & controller method to
-     *       show 5 word types at a time
-     */
+    function __construct()
+    {
+        $this->middleware('permission:wordtype-list|wordtype-create|wordtype-edit|wordtype-delete', ['only' => ['index','show','search']]);
+        $this->middleware('permission:wordtype-create', ['only' => ['create','store']]);
+        $this->middleware('permission:wordtype-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:wordtype-delete', ['only' => ['delete','destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */

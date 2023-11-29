@@ -20,7 +20,7 @@
             <div class="w-full p-2 m-0 mb-6">
                 <p class="w-full p-4 bg-amber-500 text-white rounded">
                     <i class="fa fa-check-circle text-amber-200 bg-amber-800 rounded-full mr-4 p-2"></i>
-                    The definition "{{ session()->get('updated') }} must be updated only user who created the definition.
+                    You don`t have permission to change the definition {{ session()->get('updated') }}
                 </p>
             </div>
         @endif
@@ -28,7 +28,7 @@
             <div class="w-full p-2 m-0 mb-6">
                 <p class="w-full p-4 bg-purple-500 text-white rounded">
                     <i class="fa fa-check-circle text-purple-200 bg-purple-800 rounded-full mr-4 p-2"></i>
-                    The definition "{{ session()->get('deleted') }} must be deleted only user who created the definition.
+                   You don`t have permission to delete {{ session()->get('deleted') }}
                 </p>
             </div>
         @endif

@@ -10,10 +10,10 @@
         <section class="p-4 bg-white dark:bg-gray-800 overflow-hidden
                   rounded-md text-gray-900 dark:text-gray-100 grow border-gray-200 shadow-sm">
             <header class="text-lg font-medium bg-gray-800 text-gray-200 p-4 rounded-t-md -m-4 mb-2 md:mb-4">
-                <h4>Status</h4>
+                <h4>Number of Words</h4>
             </header>
             <p>
-                {{ __("You're logged in!") }}
+                {{ $words  }}
             </p>
         </section>
 
@@ -21,22 +21,16 @@
                   rounded-md text-gray-900 dark:text-gray-100 grow border border-gray-200 md:border-0 shadow-sm
                  ">
             <header class="text-lg font-medium bg-gray-800 text-gray-200 p-4 rounded-t-md -m-4 mb-2">
-                <h4>Section Header</h4>
+                <h4>Number of Definition</h4>
             </header>
             <p>
-                {{ __("You're logged in!") }}
+                {{ $definitions }}
             </p>
         </section>
 
-        <section class="p-4 bg-white dark:bg-gray-800 gap-4 flex flex-col
-                  rounded-md text-gray-900 dark:text-gray-100 grow border-gray-200  shadow-sm">
-            <header class="text-lg font-medium bg-gray-800 text-gray-200 p-4 rounded-t-md -m-4 mb-2">
-                <h4>Section Header</h4>
-            </header>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-            <p>Accusantium dolores earum fuga ipsam labore nemo nobis nulla ratione tempore voluptatem. Blanditiis consequuntur
-                eos iusto laudantium minus nam quasi voluptates! Ducimus.</p>
-        </section>
+
+
+
 
     </div>
 </x-app-layout>

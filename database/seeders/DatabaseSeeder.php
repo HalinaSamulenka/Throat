@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             WordTypeSeeder::class,
             WordSeeder::class,
             DefinitionSeeder::class,
+            PermissionTableSeeder::class,
         ]);
     }
 }

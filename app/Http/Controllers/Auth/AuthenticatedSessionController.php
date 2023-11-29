@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DashboardAdminController;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
@@ -28,8 +29,11 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if (Auth::user()->hasRole('admin')){
+            return redirect()->intended(RouteServiceProvider::DashboardAdmin);
+        }else {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
     }
 
     /**

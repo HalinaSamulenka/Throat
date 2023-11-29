@@ -11,14 +11,20 @@ use Illuminate\Support\Facades\Auth;
 
 class WordController extends Controller
 {
+    function __construct()
+    {
 
+        $this->middleware('permission:word-create', ['only' => ['create','store']]);
+        $this->middleware('permission:word-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:word-delete', ['only' => ['delete','destroy']]);
+    }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the word resource.
      */
     public function index()
     {
-        $definitions=Definition::first();
+        //$definitions=Definition::first();
 
         $request = Request()->all();
         $clear = $request['clear'] ?? '';
@@ -35,7 +41,7 @@ class WordController extends Controller
                 ->paginate(10);
         }
 
-        return view('word.index', compact(['words','definitions', 'searchFor']));
+        return view('word.index', compact(['words', 'searchFor']));
     }
 
     public function indexOwnWords()
@@ -95,9 +101,17 @@ class WordController extends Controller
      */
     public function edit(Word $word)
     {
-        //$definitions = Definition::all();
 
-        return view('word.edit', compact(['word']));
+        if((auth()->check() && Auth::user()->hasRole('staff') && $word->user_id != 1) ||
+            (auth()->check() && Auth::user()->hasRole('admin'))||
+            (auth()->check() && Auth::user()->id == $word->user_id)){
+        return view('word.edit', compact(['word']));}
+        else
+        {
+            return redirect(route('words.index'))
+                ->with('updatedOwn', $word->word)
+                ->with('messages', 'updatedOwn');
+        }
     }
 
     /**
@@ -106,25 +120,27 @@ class WordController extends Controller
     public function update(UpdateWordRequest $request, Word $word)
     {
         $validated = $request->validated();
-        if(Auth::user()->id == $word->user_id){
             $word->word = $request->input('word');
             $word->review = $request->review == true ? '1':'0';
             $word->update();
 
         return redirect(route('words.index'))
             ->with('updated', "{$word->word}")
-            ->with('messageType', 'updated');}
-        else{
-            return redirect(route('words.index'))
-                ->with('updatedOwn', $word->word)
-                ->with('messages', 'updatedOwn');
-        }
+            ->with('messageType', 'updated');
 
     }
 
     public function delete(Word $word)
     {
-        return view('word.delete', compact(['word']));
+        if((auth()->check() && Auth::user()->hasRole('admin'))||
+            (auth()->check() && Auth::user()->id == $word->user_id)){
+        return view('word.delete', compact(['word']));}
+        else
+        {
+            return redirect(route('words.index'))
+                ->with('deletedOwn', $word->word)
+                ->with('messages', 'deletedOwn');
+        }
     }
 
     /**
@@ -132,18 +148,11 @@ class WordController extends Controller
      */
     public function destroy(Word $word)
     {
-
-        if(Auth::user()->id == $word->user_id){
             $oldWord = $word;
             $word->delete();
             $word->definitions()->delete();
 
-        return redirect(route('words.index'))->with('deleted', "{$oldWord->word}");}
-        else{
-            $oldWord = $word;
-            return redirect(route('words.index'))
-                ->with('deletedOwn', $oldWord->word)
-                ->with('messages', 'deletedOwn');
-        }
+        return redirect(route('words.index'))->with('deleted', "{$oldWord->word}")
+            ->with('messages', 'deleted');
     }
 }

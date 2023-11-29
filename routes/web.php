@@ -3,10 +3,12 @@
 use App\Http\Controllers\DefinitionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StaticPageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WordController;
 use App\Http\Controllers\WordTypeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,9 +26,10 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //})->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+//Route::get('/dashboard', function () {
+//        return view('/dashboard');
+//})->name('dashboard');
+
 
 /**
  * Static links and pages (non-authenticated)
@@ -48,6 +51,8 @@ Route::get('/static/icons', [StaticPageController::class, 'icons'])
  * Authenticated pages
  */
 Route::middleware('auth')->group(function () {
+    Route::get('/admin/dashboard',[\App\Http\Controllers\DashboardAdminController::class,'index'])->name('admin.dashboard');
+    Route::get('/dashboard',[\App\Http\Controllers\DashboardController::class,'index'])->name('dashboard');
 
     Route::resource('/ratings', RatingController::class)->except(['index', 'show']);
     Route::get('/ratings/{rating}/delete', [RatingController::class, 'delete'])->name('ratings.delete');
@@ -66,6 +71,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/users', UserController::class)->except(['index', 'show']);
     Route::get('/users/{user}/delete', [UserController::class, 'delete'])->name('users.delete');
+
+    Route::resource('roles', RoleController::class);
+    Route::get('/roles/{role}/delete', [RoleController::class, 'delete'])->name('roles.delete');
+
 });
 
 Route::resource('words', \App\Http\Controllers\WordController::class)->only(['index', 'show']);

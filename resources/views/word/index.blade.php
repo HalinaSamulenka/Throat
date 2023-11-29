@@ -21,7 +21,7 @@
             <div class="w-full p-2 m-0 mb-6">
                 <p class="w-full p-4 bg-amber-500 text-white rounded">
                     <i class="fa fa-check-circle text-amber-200 bg-amber-800 rounded-full mr-4 p-2"></i>
-                    The word "{{ session()->get('updated') }} must be updated only user who created the word.
+                    You don`t have permission to change word {{ session()->get('updated') }}
                 </p>
             </div>
         @endif

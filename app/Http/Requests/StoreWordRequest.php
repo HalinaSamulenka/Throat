@@ -22,7 +22,7 @@ class StoreWordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'word' => ['required', 'max:255'],
+            'word' => ['required', 'min:2','max:255'],
             'appropriate'=> ['nullable'],
             'review'=> ['nullable'],
         ];

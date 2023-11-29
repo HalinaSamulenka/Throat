@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -14,42 +16,19 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $seedUsers = [
-            [
-                'name' => 'Ad Ministrator',
-                'email' => 'ad.ministrator@example.com',
-                'password' => 'Password1',
-                'roles' => ['admin', 'member', 'staff'],
-            ],
-            [
-                'name' => 'STUDENT_GIVEN_NAME',
-                'email' => 'STUDENT_GIVEN_NAME@example.com',
-                'email_verified_at' => now(),
-                'password' => 'Secret1',
-                'roles' => ['admin', 'staff', 'member'],
-            ],
-            [
-                'name' => 'Annie Wun',
-                'email' => 'annie.wun@example.com',
-                'password' => 'Password1',
-                'roles' => ['member'],
-            ],
-            [
-                'name' => 'Andy Mann',
-                'email' => 'andy.mann@example.com',
-                'password' => 'Password1',
-                'roles' => ['staff', 'member'],
-            ],
-        ];
 
-        foreach ($seedUsers as $newUser) {
-            $newUser['password'] = Hash::make($newUser['password']);
-            $user = User::create([
-                'name' => $newUser['name'],
-                'email' => $newUser['email'],
-                'password' => $newUser['password'],
-            ]);
+        $superuser = User::create([
+            'name' => 'Ad Ministrator',
+            'email' => 'ad.ministrator@example.com',
+            'password' => bcrypt('Password1'),
+            //'roles' => ['admin', 'member', 'staff'],
+        ]);
 
-        }
+        $superuserrole = Role::create(['name' => 'admin']);
+        $permissions = Permission::pluck('id', 'id')->all();
+        $superuserrole->syncPermissions($permissions);
+        $superuser->assignRole([$superuserrole->id]);
+
+
     }
 }

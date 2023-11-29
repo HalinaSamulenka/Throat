@@ -8,7 +8,13 @@ use App\Models\Rating;
 
 class RatingController extends Controller
 {
-
+    function __construct()
+    {
+        $this->middleware('permission:rating-list|rating-create|rating-edit|rating-delete', ['only' => ['index','show','search']]);
+        $this->middleware('permission:rating-create', ['only' => ['create','store']]);
+        $this->middleware('permission:rating-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:rating-delete', ['only' => ['delete','destroy']]);
+    }
 
     /**
      * Display a listing of the resource.

@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Auth;
 
 class DefinitionController extends Controller
 {
+    function __construct()
+    {
+
+        $this->middleware('permission:definition-create', ['only' => ['create','store']]);
+        $this->middleware('permission:definition-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:definition-delete', ['only' => ['delete','destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -24,16 +31,8 @@ class DefinitionController extends Controller
             $searchFor = "";
         }
 
-        if ($searchFor === "" && Auth::user()->id == 1) {
+        if ($searchFor === "") {
             $definitions=Definition::with('word')->paginate(5);
-        }
-        elseif($searchFor === "") {
-            $definitions=Definition::with('word')->where('appropriate',0)->paginate(5);
-        }
-        elseif (Auth::user()->id == 1){
-            $definitions = Definition::with('word')
-            ->where('definition', 'like', "%{$searchFor}%")
-            ->paginate(5);
         }
         else{
             $definitions = Definition::with('word')
@@ -123,9 +122,15 @@ class DefinitionController extends Controller
         $words = Word::all();
         $wordTypes = WordType::all();
         $ratings = Rating::with('definition')->get();
-
+        if((auth()->check() && Auth::user()->hasRole('staff') && $definition->user_id != 1) ||
+            (auth()->check() && Auth::user()->hasRole('admin')) ||
+            (auth()->check() && Auth::user()->id == $definition->user_id)){
         return view('definitions.edit', compact(['words','wordTypes','ratings','definition']));
-    }
+    }else{
+            return redirect(route('definitions.index'))
+                ->with('updatedOwn', $definition->definition)
+                ->with('messages', 'updatedOwn');
+        }}
 
     /**
      * Update the specified resource in storage.
@@ -135,22 +140,18 @@ class DefinitionController extends Controller
         $definition->word_id = $request->input('word_id');
         $definition->word_type_id = $request->input('word_type_id');
         $definition->definition = $request->input('definition');
-        $definition->appropriate = $request->appropriate == true ? '1':'0';
-        $definition->review = $request->review == true ? '1':'0';
-       if(Auth::user()->id == $definition->user_id){
-        $definition->update();
-        $definition->rating()->syncWithPivotValues([$request->rating_id],['user_id'=>Auth::user()->id]);
+        $definition->appropriate = $request->appropriate == true ? '1' : '0';
+        $definition->review = $request->review == true ? '1' : '0';
 
-        return redirect(route('definitions.index'))
-            ->with('updated', $definition->definition)
-            ->with('messages', 'updated');}
-       else{
-           return redirect(route('definitions.index'))
-               ->with('updatedOwn', $definition->definition)
-               ->with('messages', 'updatedOwn');
-       }
+            $definition->update();
+            $definition->rating()->syncWithPivotValues([$request->rating_id], ['user_id' => Auth::user()->id]);
+
+            return redirect(route('definitions.index'))
+                ->with('updated', $definition->definition)
+                ->with('messages', 'updated');
 
     }
+
 
     public function delete(Definition $definition)
     {
@@ -158,7 +159,15 @@ class DefinitionController extends Controller
         $wordTypes = WordType::all();
         $user = $definition->user()->first();
         $rating = $definition->rating()->first();
+        if((auth()->check() && Auth::user()->hasRole('staff') && $definition->user_id != 1) ||
+            (auth()->check() && Auth::user()->hasRole('admin')) ||
+            (auth()->check() && Auth::user()->id == $definition->user_id)){
         return view('definitions.delete', compact(['definition','words','wordTypes','rating','user']));
+    }else{
+            return redirect(route('definitions.index'))
+                ->with('deletedOwn', $definition->definition)
+                ->with('messages', 'deleted');
+        }
     }
 
     /**
@@ -166,17 +175,14 @@ class DefinitionController extends Controller
      */
     public function destroy(Definition $definition)
     {
-        if(Auth::user()->id == $definition->user_id){
+
             $oldDefinition = $definition;
             $definition->delete();
             $definition->rating()->detach();
 
-            return redirect(route('definitions.index'))->with('deleted', "{$oldDefinition->definition}");}
-        else{
-            $oldDefinition = $definition;
             return redirect(route('definitions.index'))
-                ->with('deletedOwn', $oldDefinition->definition)
-                ->with('messages', 'deletedOwn');
-        }
+                ->with('deleted',$oldDefinition->definition)
+                ->with('messages', 'deleted');
+
     }
 }
